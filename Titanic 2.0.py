@@ -21,13 +21,10 @@ test = pd.read_csv('test.csv')
 
 
 # In[6]:
-
-
 train.describe()
 
 
 # In[110]:
-
 
 train.isnull().sum()
 
@@ -135,13 +132,6 @@ train['Age'] = train[['Age','Pclass']].apply(impute_age,axis=1)
 test['Age'] = test[['Age','Pclass']].apply(impute_age,axis=1)
     
 
-
-# In[ ]:
-
-
-
-
-
 # # Dummy data of features
 
 # In[151]:
@@ -184,24 +174,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 rfc = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=1)
-
-
-# In[162]:
-
-
 rfc.fit(train_X,train_y)
-
-
-# In[163]:
-
-
 y_test = rfc.predict(test)
-
-
-# In[164]:
-
-
-test.head()
 
 
 # In[165]:
@@ -210,10 +184,3 @@ test.head()
 output = pd.DataFrame({'PassengerId': test.PassengerId, 'Survived': y_test})
 output.to_csv('my_submission.csv', index=False)
 print("Your submission was successfully saved!")
-
-
-# In[ ]:
-
-
-
-
