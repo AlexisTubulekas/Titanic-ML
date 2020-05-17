@@ -24,13 +24,13 @@ test = pd.read_csv('test.csv')
 
 # In[230]:
 
-
+#Print information about training set
 print(train.info()
      ,train.describe())
 train.head()
 
 
-# # Explorative Analysis
+# # Explorative Analysis Section
 
 # In[7]:
 
@@ -39,8 +39,8 @@ train.head()
 male_data = train[train['Sex']=='male']
 female_data = train[train['Sex']=='female']
 
+#Plot
 fig, ax =plt.subplots(1,2)
-
 sns.countplot(x='Sex',hue='Survived',data=male_data,ax=ax[0])
 sns.countplot(x='Sex',hue='Survived',data=female_data,ax=ax[1])
 
@@ -48,8 +48,7 @@ sns.countplot(x='Sex',hue='Survived',data=female_data,ax=ax[1])
 # In[8]:
 
 
-#Age groups
-
+#Age groups for vizualisation
 def custom_round(x, base=10):
     return int(base * round(float(x)/base))
 
@@ -118,12 +117,12 @@ plt.show()
 # In[232]:
 
 
-#Create means for different Pclass to handle missing values
+#Create means for different Pclass to handle missing age values
 mean_age_1 = train[train['Pclass']==1]['Age'].mean()
 mean_age_2 = train[train['Pclass']==2]['Age'].mean()
 mean_age_3 = train[train['Pclass']==3]['Age'].mean()
 
-#If age is missing asign a mean
+#If age is missing asign a mean based on class
 def impute_age(x):
     
     if pd.isnull(x[0]):
@@ -148,7 +147,7 @@ test['Age'] = test[['Age','Pclass']].apply(impute_age,axis=1)
     
 
 
-# ## Clean Fare
+# ## Clean Fare Column
 
 # In[233]:
 
@@ -188,7 +187,7 @@ test['Title'] = test['Title'].apply(lambda x:x.lstrip())
 # In[236]:
 
 
-#replacing all titles with mr, mrs, miss, master
+#replacing all titles with mr, mrs, miss, master and noble
 def replace_titles(x):
    title=x['Title']
    if title in ['Don', 'Major', 'Capt', 'Jonkheer', 'Rev', 'Col','Sir','Dona']:
@@ -230,15 +229,10 @@ test_X = test[features]
 
 
 # In[266]:
-
-
-train_X.head()
-
-
 # In[256]:
 
 
-#Create dummy variables for Sex column
+#Create dummy variables for Sex column for train and test sets
 sex_dum = pd.get_dummies(train_X['Sex'],drop_first=True)
 train_X.drop('Sex',axis=1,inplace=True)
 train_X = pd.concat([train_X,sex_dum],axis=1)
@@ -252,7 +246,7 @@ test_X = pd.concat([test_X,sex_dum],axis=1)
 # In[257]:
 
 
-#Create dummy variables for Title column
+#Create dummy variables for Title column for train and test sets
 title_dum = pd.get_dummies(train_X['Title'],drop_first=True)
 train_X.drop('Title',axis=1,inplace=True)
 train_X = pd.concat([train_X,title_dum],axis=1)
@@ -310,10 +304,3 @@ y_test = rfc.predict(test_X)
 output = pd.DataFrame({'PassengerId': test.PassengerId, 'Survived': y_test})
 output.to_csv('my_submission.csv', index=False)
 print("Your submission was successfully saved!")
-
-
-# In[ ]:
-
-
-
-
